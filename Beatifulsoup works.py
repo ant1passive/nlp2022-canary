@@ -20,3 +20,7 @@ Soup = BeautifulSoup(request.text, 'html.parser')
 heading_tags = ["h1", "h2", "h3"]
 for tags in Soup.find_all(heading_tags):
     print(tags.name + ' -> ' + tags.text.strip())
+
+for link in Soup.find_all("a"):
+    print("Text: {}".format(link.text))
+    print("href: {}".format(link.get("href")))
