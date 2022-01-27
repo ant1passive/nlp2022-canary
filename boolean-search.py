@@ -46,3 +46,29 @@ test_query("( NOT example OR great ) AND nothing") # AND, OR, NOT can be written
 test_query("( not example or great ) and nothing") # ... or all small letters
 test_query("not example and not nothing")
 
+# ask the user to type the query
+user_query = ''
+# Start a loop that will run until the user enters 'quit'.
+while user_query != 'quit':
+    # Ask the user for a query
+    user_query = input("Type the query, or enter 'quit': ")
+    # runs the query
+    if user_query != 'quit':
+        test_query(user_query)
+
+# same as up but includes errors
+while True:
+    try:
+        user_query = str(input("Type the query, or enter 'quit': "))
+        if user_query != 'quit':
+            test_query(user_query)
+        else:
+            break
+    except (TypeError):
+        print('Invalid input')
+    except (KeyError):
+        print('Keyerror')
+    except (SyntaxError):
+        print('Syntax Error')
+
+
