@@ -20,11 +20,24 @@ def rewrite_token(t):
 def rewrite_query(query): # rewrite every token in the query
     return " ".join(rewrite_token(t) for t in query.split())
 
+"""
 def test_query(query):
     print("Query: '" + query + "'")
     print("Rewritten:", rewrite_query(query))
-    print("Matching:", eval(rewrite_query(query))) # Eval runs the string as a Python command
+    print("Matching:", eval(rewrite_query(query))) # Eval runs the string as a Python command 
     print()
+"""
+
+def test_query(query):
+    print("Query: '" + query + "'")
+    print("Rewritten:", rewrite_query(query))
+    print("Matching documents: \n")
+    results = eval(rewrite_query(query)).getA()[0] #Convert the numpy matrix into a numpy array so it may be iterated
+    for i, match in enumerate(results):            #Iterate through the array and print the corresponding documents if true 
+        if match == 1:
+            print(documents[i])
+    print()
+
 
 documents = ["This is a silly example",
              "A better example",
@@ -46,6 +59,7 @@ test_query("( NOT example OR great ) AND nothing") # AND, OR, NOT can be written
 test_query("( not example or great ) and nothing") # ... or all small letters
 test_query("not example and not nothing")
 
+"""
 # ask the user to type the query
 user_query = ''
 # Start a loop that will run until the user enters 'quit'.
@@ -55,6 +69,7 @@ while user_query != 'quit':
     # runs the query
     if user_query != 'quit':
         test_query(user_query)
+"""
 
 # same as up but includes errors
 while True:
