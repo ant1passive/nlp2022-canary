@@ -98,7 +98,7 @@ while True:
 
 # 5. opens text file and splits text to articles
 #path = input("Give filepath")
-path = r"C:\Users\jenni\Downloads\enwiki-20181001-corpus.100-articles\enwiki-20181001-corpus.100-articles.txt"
+path = r"write your path"
 file = open(path, encoding="utf8")
 document = file.read()
 articles = document.split("</article>")
