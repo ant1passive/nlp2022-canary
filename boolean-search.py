@@ -10,6 +10,9 @@ from urllib import request
 # Parentheses are left untouched
 # Everything else interpreted as a term and fed through td_matrix[t2i["..."]]
 
+max_documents = 2
+max_characters = 10
+
 d = {"and": "&", "AND": "&",
      "or": "|", "OR": "|",
      "not": "1 -", "NOT": "1 -",
@@ -33,10 +36,16 @@ def test_query(query):
     print("Query: '" + query + "'")
     print("Rewritten:", rewrite_query(query))
     print("Matching documents: \n")
+    total_matches = 0
     results = eval(rewrite_query(query)).getA()[0] #Convert the numpy matrix into a numpy array so it may be iterated
     for i, match in enumerate(results):            #Iterate through the array and print the corresponding documents if true 
         if match == 1:
-            print(documents[i])
+            total_matches += 1
+            if total_matches <= max_documents:
+                print(str(documents[i][:max_characters]))
+                
+    print()
+    print("Total matches:", total_matches)
     print()
 
 
