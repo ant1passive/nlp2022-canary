@@ -5,25 +5,18 @@
 
 from sklearn.feature_extraction.text import CountVectorizer
 
+
+example_documents = ["This is a silly example",
+                     "A better example",
+                     "Nothing to see here",
+                     "This is a great and long example"]
+
+
 class searchEngine:
 
     def __init__(self):
-
         self.max_shown_documents = 10
-        self.max_shown_characters = 72
-        self.documents = ["This is a silly example",
-                          "A better example",
-                          "Nothing to see here",
-                          "This is a great and long example"]
-
-        self.cv = CountVectorizer(lowercase=True, binary=True)
-        self.sparse_matrix = self.cv.fit_transform(self.documents)
-
-        #print("Term-document matrix: (?)\n")
-        #print(self.sparse_matrix)
-
-        self.sparse_td_matrix = self.sparse_matrix.T.tocsr()
-        self.t2i = self.cv.vocabulary_  # shorter notation: t2i = term-to-index
+        self.max_shown_characters = 72  # one row of usual console window
 
         # Operators and/AND, or/OR, not/NOT become &, |, 1 -
         # Parentheses are left untouched
@@ -33,11 +26,27 @@ class searchEngine:
                   "not": "1 -", "NOT": "1 -",
                   "(": "(", ")": ")"}          # operator replacements
 
+        # initialize this instance with silly examples by default
+        self.index_documents(example_documents)
+
+
+    def index_documents(self, documents):
+        self.documents = documents
+        self.cv = CountVectorizer(lowercase=True, binary=True)
+        self.sparse_matrix = self.cv.fit_transform(self.documents)
+        #print("Term-document matrix: (?)\n")
+        #print(self.sparse_matrix)
+        self.sparse_td_matrix = self.sparse_matrix.T.tocsr()
+        self.t2i = self.cv.vocabulary_  # shorter notation: t2i = term-to-index
+     
+
     def rewrite_token(self, t):
         return self.d.get(t, 'self.sparse_td_matrix[self.t2i["{:s}"]].todense()'.format(t)) # Make retrieved rows dense
 
+
     def rewrite_query(self, query): # rewrite every token in the query
         return " ".join(self.rewrite_token(t) for t in query.split())
+
 
     def test_query(self, query):
         print("Query: '" + query + "'")
