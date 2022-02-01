@@ -101,7 +101,7 @@ while True:
 path = r"C:\Users\jenni\Downloads\enwiki-20181001-corpus.100-articles\enwiki-20181001-corpus.100-articles.txt"
 file = open(path, encoding="utf8")
 document = file.read()
-articles = document.split("</article>\n")
+articles = document.split("</article>")
 print(len(articles))
 print(articles[100])
 print(articles[0])
