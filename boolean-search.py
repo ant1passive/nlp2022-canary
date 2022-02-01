@@ -4,6 +4,7 @@
 # https://notebooks.csc.fi/notebooks/19db991cc4924741a6d4637de9b5cdb8/tree/nlp-tutorials/tutorials
 
 from sklearn.feature_extraction.text import CountVectorizer
+from urllib import request
 
 # Operators and/AND, or/OR, not/NOT become &, |, 1 -
 # Parentheses are left untouched
@@ -86,4 +87,12 @@ while True:
     except (SyntaxError):
         print('Syntax Error')
 
-
+# 5. opens text file and splits text to articles
+#path = input("Give filepath")
+path = r"C:\Users\jenni\Downloads\enwiki-20181001-corpus.100-articles\enwiki-20181001-corpus.100-articles.txt"
+file = open(path, encoding="utf8")
+document = file.read()
+articles = document.split("</article>\n")
+print(len(articles))
+print(articles[100])
+print(articles[0])
