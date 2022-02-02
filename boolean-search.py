@@ -13,6 +13,19 @@ foo.test_query("not example and not nothing")
 
 """
 
+# 5. opens text file and splits text to articles
+#path = input("Give filepath")
+path = r"write your path"
+#path = r"./input-texts/enwiki-20181001-corpus.100-articles.txt"
+file = open(path, encoding="utf8")
+document = file.read()
+articles = document.split("</article>")
+print(len(articles))
+#print(articles[100])
+#print(articles[0])
+
+foo.index_documents(articles)
+
 while True:
     try:
         user_query = str(input("Type the query, or enter 'quit': "))
@@ -27,14 +40,4 @@ while True:
     except (SyntaxError):
         print('Syntax Error')
 
-"""
-# 5. opens text file and splits text to articles
-#path = input("Give filepath")
-path = r"write your path"
-file = open(path, encoding="utf8")
-document = file.read()
-articles = document.split("</article>")
-print(len(articles))
-print(articles[100])
-print(articles[0])
-"""
+
