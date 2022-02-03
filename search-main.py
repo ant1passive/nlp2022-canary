@@ -1,7 +1,8 @@
 
-from searchengine import searchEngine
+from se_boolean import searchEngineBoolean
+from se_tfidf import searchEngineTFIDF
 
-foo = searchEngine()
+foo = searchEngineBoolean()
 
 """
 

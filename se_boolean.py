@@ -12,7 +12,7 @@ example_documents = ["This is a silly example",
                      "This is a great and long example"]
 
 
-class searchEngine:
+class searchEngineBoolean:
 
     def __init__(self):
         self.max_shown_documents = 10
