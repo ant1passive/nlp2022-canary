@@ -32,7 +32,7 @@ def main():
 
     # 5. opens text file and splits text to articles
     # path = input("Give filepath")
-    path = r"C:\Users\Adrían\testidata\enwiki-20181001-corpus.100-articles.txt"
+    path = r"write your path"
     #path = r"./input-texts/enwiki-20181001-corpus.100-articles.txt"
     file = open(path, encoding="utf8")
     document = file.read()
