@@ -1,6 +1,9 @@
 
 from se_boolean import searchEngineBoolean
 from se_tfidf import searchEngineTFIDF
+import numpy
+
+numpy.set_printoptions(threshold = numpy.inf) #For testing purposes, allows long matrices to be printed in full.
 
 
 def queryPrompt(searchEngine):
