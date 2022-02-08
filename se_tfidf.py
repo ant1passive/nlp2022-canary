@@ -25,7 +25,7 @@ class searchEngineTFIDF:
         self.d = {}          # operator replacements
 
         # initialize this instance with silly examples by default
-        self.index_documents(example_documents)
+        #self.index_documents(example_documents)
 
 
     def index_documents(self, documents):
@@ -36,21 +36,50 @@ class searchEngineTFIDF:
         #print(self.sparse_matrix)
         #self.sparse_td_matrix = self.sparse_matrix.T.tocsr()
         self.t2i = self.tf.vocabulary_  # shorter notation: t2i = term-to-index
+        self.all_words = []
+        for key in self.t2i.keys():
+            self.all_words.append(key)
+        print(self.all_words[:10])
      
 
 
 
     def test_query(self, query):
         print("Query: '" + query + "'")
-        query_vector = self.tf.transform([query]).todense() #Calculate a vector for the query
         
         self.scores = []
+        if '*' in query:
+            queries_to_make = []
+            if query[0] == '*':
+                for word in self.all_words:
+                    if query[1:] in word[-len(query[1:]):]:
+                        queries_to_make.append(word)
 
-        for i in range(0, len(self.documents)-1):        #Assign similarity scores to all documents, and store them in a list
-            document_vector = self.sparse_matrix[:, i]
-            score = np.array(np.dot(query_vector, document_vector))[0][0]
+            elif query[-1] == '*':
+                for word in self.all_words:
+                    if query[:-1] in word[:(len(query)-1)]:
+                        queries_to_make.append(word)   
+            
+            else:
+                pass
+            print(queries_to_make)
+            for word in queries_to_make:
+                query_vector = self.tf.transform([word]).todense() #Calculate a vector for the query
+                for i in range(0, len(self.documents)-1):        #Assign similarity scores to all documents, and store them in a list
+                    document_vector = self.sparse_matrix[:, i]
+                    score = np.array(np.dot(query_vector, document_vector))[0][0]
 
-            self.scores.append((score, i))
+                    self.scores.append((score, i))
+
+                
+                
+        else:
+            query_vector = self.tf.transform([query]).todense() #Calculate a vector for the query
+            for i in range(0, len(self.documents)-1):        #Assign similarity scores to all documents, and store them in a list
+                document_vector = self.sparse_matrix[:, i]
+                score = np.array(np.dot(query_vector, document_vector))[0][0]
+
+                self.scores.append((score, i))
 
         self.scores.sort(reverse = True) 
 
