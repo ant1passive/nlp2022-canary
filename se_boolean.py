@@ -27,11 +27,12 @@ class searchEngineBoolean:
                   "(": "(", ")": ")"}          # operator replacements
 
         # initialize this instance with silly examples by default
-        self.index_documents(example_documents)
+        #self.index_documents(example_documents)
 
 
-    def index_documents(self, documents):
+    def index_documents(self, documents, titles):
         self.documents = documents
+        self.titles = titles
         self.cv = CountVectorizer(lowercase=True, binary=True, token_pattern=r"(?u)\b\w+\b")
         self.sparse_matrix = self.cv.fit_transform(self.documents)
         #print("Term-document matrix: (?)\n")
@@ -58,9 +59,8 @@ class searchEngineBoolean:
             if match == 1:
                 total_matches += 1
                 if total_matches <= self.max_shown_documents:
-                    print(str(self.documents[i][:self.max_shown_characters]))
-                    
-        print()
+                    print(self.titles[i])
+                    print(str(self.documents[i][:self.max_shown_characters]), "\n")
         print("Total matches:", total_matches)
         print()    
 

@@ -29,8 +29,9 @@ class searchEngineTFIDF:
         #self.index_documents(example_documents)
 
 
-    def index_documents(self, documents):
+    def index_documents(self, documents, titles):
         self.documents = documents
+        self.titles = titles
         self.tf = TfidfVectorizer(lowercase=True, sublinear_tf = True, use_idf = True, norm = "l2")
         self.sparse_matrix = self.tf.fit_transform(self.documents).T.todense()
         #print("Term-document matrix: (?)\n")
@@ -40,16 +41,16 @@ class searchEngineTFIDF:
         self.all_words = []
         for key in self.t2i.keys():
             self.all_words.append(key)
-        print(self.all_words[:10])
-     
-
+        #print(self.all_words[:10])
 
 
     def test_query(self, query):
         print("Query: '" + query + "'")
-        
         self.scores = []
-        if '*' in query:                                        #If the query has an *, do a wildcard search. Currently only works if in the beginning or end of 
+
+        # If the query has an *, do a wildcard search. Currently only
+        # works if in the beginning or end of query
+        if '*' in query:
             queries_to_make = []
             if query[0] == '*':
                 for word in self.all_words:
@@ -75,11 +76,9 @@ class searchEngineTFIDF:
 
                     self.scores.append((score, i))
 
-                
-                
-        else:
+        else: # There was no '*' in query
             query_vector = self.tf.transform([query]).todense() #Calculate a vector for the query
-            for i in range(0, len(self.documents)-1):        #Assign similarity scores to all documents, and store them in a list
+            for i in range(0, len(self.documents)-1):           #Assign similarity scores to all documents, and store them in a list
                 document_vector = self.sparse_matrix[:, i]
                 score = np.array(np.dot(query_vector, document_vector))[0][0]
 
@@ -96,6 +95,7 @@ class searchEngineTFIDF:
             else:
                 document_index = self.scores[i][1]
                 if self.scores[i][0] > 0:
-                    print(str(self.documents[document_index][:self.max_shown_characters]), "\n")
-                    print("Similarity to query:", self.scores[i][0], "\n")
+                    print(self.titles[document_index])
+                    print(str(self.documents[document_index][:self.max_shown_characters]))
+                    print("\tSimilarity to query:", self.scores[i][0], "\n")
 
