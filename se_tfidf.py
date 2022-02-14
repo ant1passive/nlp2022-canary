@@ -45,7 +45,6 @@ class searchEngineTFIDF:
 
 
     def test_query(self, query):
-        print("Query: '" + query + "'")
         self.scores = []
 
         # If the query has an *, do a wildcard search. Currently only
@@ -86,8 +85,26 @@ class searchEngineTFIDF:
 
         self.scores.sort(reverse = True) 
 
-        print("Most similar documents: \n")
+        #print("Most similar documents: \n")
+        self.final_list = []
+
+        for i in range(0, self.max_shown_documents):            #create a list that can be returned
+            if self.scores == []:
+                self.final_list.append(("Nothing found", "Empty", 0.0))
+                break
+            else:
+                document_index = self.scores[i][1]
+                if self.scores[i][0] > 0:
+                    title = self.titles[document_index]
+                    contents = str(self.documents[document_index][:self.max_shown_characters])
+                    similarity = self.scores[i][0]
+                    self.final_list.append((title, contents, similarity))
+        print(self.scores)
+        print(self.final_list)  
+        return self.final_list
+
         
+        """
         for i in range(0, self.max_shown_documents):       #Print the documents with the highest scores
             if self.scores == []:
                 print("No matches found")
@@ -99,3 +116,5 @@ class searchEngineTFIDF:
                     print(str(self.documents[document_index][:self.max_shown_characters]))
                     print("\tSimilarity to query:", self.scores[i][0], "\n")
 
+        """
+        
