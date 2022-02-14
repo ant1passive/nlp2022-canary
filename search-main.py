@@ -4,7 +4,19 @@ from se_tfidf import searchEngineTFIDF
 from bs4 import BeautifulSoup
 import numpy
 
+
 numpy.set_printoptions(threshold = numpy.inf) #For testing purposes, allows long matrices to be printed in full.
+
+
+def print_results(result_list):
+    if not result_list:
+        print("No matches found")
+        return
+    else:
+        for item in result_list:
+            print(item[0]) # title
+            print(item[1]) # contents
+            print("\tSimilarity to query:", item[2], "\n") # similarity
 
 
 def queryPrompt(searchEngine):
@@ -12,7 +24,7 @@ def queryPrompt(searchEngine):
         try:
             user_query = str(input("Type the query (empty quits): "))
             if user_query != '':
-                searchEngine.test_query(user_query)
+                print_results(searchEngine.test_query(user_query))
             else:
                 break
         except (TypeError):

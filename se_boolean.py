@@ -50,17 +50,24 @@ class searchEngineBoolean:
 
 
     def test_query(self, query):
-        print("Query: '" + query + "'")
-        print("Rewritten:", self.rewrite_query(query))
-        print("Matching documents: \n")
+        #print("Query: '" + query + "'")
+        #print("Rewritten:", self.rewrite_query(query))
+        #print("Matching documents: \n")
+        self.final_list = []
         total_matches = 0
-        results = eval(self.rewrite_query(query)).getA()[0] #Convert the numpy matrix into a numpy array so it may be iterated
+        try:
+            results = eval(self.rewrite_query(query)).getA()[0] #Convert the numpy matrix into a numpy array so it may be iterated
+        except KeyError:
+            # there were zero matches; return empty list
+            return self.final_list
         for i, match in enumerate(results):                 #Iterate through the array and print the corresponding documents if true 
             if match == 1:
                 total_matches += 1
                 if total_matches <= self.max_shown_documents:
-                    print(self.titles[i])
-                    print(str(self.documents[i][:self.max_shown_characters]), "\n")
-        print("Total matches:", total_matches)
-        print()    
+                    title = self.titles[i]
+                    contents = str(self.documents[i][:self.max_shown_characters])
+                    similarity = 1
+                    self.final_list.append((title, contents, similarity))
+
+        return self.final_list
 
