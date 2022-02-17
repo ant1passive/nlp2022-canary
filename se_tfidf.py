@@ -45,57 +45,51 @@ class searchEngineTFIDF:
 
 
     def test_query(self, query):
-        print("Query: '" + query + "'")
         self.scores = []
 
         # If the query has an *, do a wildcard search. Currently only
         # works if in the beginning or end of query
-        if '*' in query:
-            queries_to_make = []
-            if query[0] == '*':
-                for word in self.all_words:
-                    if query[1:].lower() in word[-len(query[1:]):]:
-                        if len(queries_to_make) < self.wildcard_max_queries:
-                            queries_to_make.append(word)
+        queries_to_make = []
 
-            elif query[-1] == '*':
-                for word in self.all_words:
-                    if query[:-1].lower() in word[:(len(query)-1)]:
-                        if len(queries_to_make) < self.wildcard_max_queries:
-                            queries_to_make.append(word)   
-            
-            else:
-                pass
-            print("Queries made:", queries_to_make)
-                
-            for word in queries_to_make:
-                query_vector = self.tf.transform([word]).todense() #Calculate a vector for the query
-                for i in range(0, len(self.documents)-1):          #Assign similarity scores to all documents, and store them in a list
-                    document_vector = self.sparse_matrix[:, i]
-                    score = np.array(np.dot(query_vector, document_vector))[0][0]
+        if query[0] == '*':
+            for word in self.all_words:
+                if query[1:].lower() in word[-len(query[1:]):]:
+                    if len(queries_to_make) < self.wildcard_max_queries:
+                        queries_to_make.append(word)
 
-                    self.scores.append((score, i))
+        elif query[-1] == '*':
+            for word in self.all_words:
+                if query[:-1].lower() in word[:(len(query)-1)]:
+                    if len(queries_to_make) < self.wildcard_max_queries:
+                        queries_to_make.append(word)   
 
-        else: # There was no '*' in query
-            query_vector = self.tf.transform([query]).todense() #Calculate a vector for the query
-            for i in range(0, len(self.documents)-1):           #Assign similarity scores to all documents, and store them in a list
+        else:   # There was no '*' in query, use the query as-is
+            queries_to_make.append(query)
+        #print("Queries made:", queries_to_make)
+
+        for word in queries_to_make:
+            query_vector = self.tf.transform([word]).todense() #Calculate a vector for the query
+            for i in range(0, len(self.documents)-1):          #Assign similarity scores to all documents, and store them in a list
                 document_vector = self.sparse_matrix[:, i]
                 score = np.array(np.dot(query_vector, document_vector))[0][0]
-
                 self.scores.append((score, i))
 
         self.scores.sort(reverse = True) 
 
-        print("Most similar documents: \n")
-        
-        for i in range(0, self.max_shown_documents):       #Print the documents with the highest scores
+        #print("Most similar documents: \n")
+        self.final_list = []
+
+        for i in range(0, self.max_shown_documents):            #create a list that can be returned
             if self.scores == []:
-                print("No matches found")
-                break
+                # no matches, return the empty list
+                return self.final_list
             else:
                 document_index = self.scores[i][1]
                 if self.scores[i][0] > 0:
-                    print(self.titles[document_index])
-                    print(str(self.documents[document_index][:self.max_shown_characters]))
-                    print("\tSimilarity to query:", self.scores[i][0], "\n")
+                    title = self.titles[document_index]
+                    contents = str(self.documents[document_index][:self.max_shown_characters])
+                    similarity = self.scores[i][0]
+                    self.final_list.append((title, contents, similarity))
+
+        return self.final_list
 

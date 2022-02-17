@@ -2,29 +2,18 @@
 from se_boolean import searchEngineBoolean
 from se_tfidf import searchEngineTFIDF
 from bs4 import BeautifulSoup
+from flask import Flask, render_template, request
 import numpy
 
-
 numpy.set_printoptions(threshold = numpy.inf) #For testing purposes, allows long matrices to be printed in full.
-
-
-def print_results(result_list):
-    if not result_list:
-        print("No matches found")
-        return
-    else:
-        for item in result_list:
-            print(item[0]) # title
-            print(item[1]) # contents
-            print("\tSimilarity to query:", item[2], "\n") # similarity
-
+app = Flask(__name__)
 
 def queryPrompt(searchEngine):
     while True:
         try:
             user_query = str(input("Type the query (empty quits): "))
             if user_query != '':
-                print_results(searchEngine.test_query(user_query))
+                searchEngine.test_query(user_query)
             else:
                 break
         except (TypeError):
@@ -41,10 +30,10 @@ def main():
     
     # Queries are possible right after this constructor call:
     # there is sample data hard-coded in the class definition.
-    foo = searchEngineBoolean()
+    # foo = searchEngineBoolean()
 
     # 5. opens text file and splits text to articles
-    path = r"write your path"
+    path = r"write path here"
     #path = r"./input-texts/enwiki-20181001-corpus.100-articles.txt"
 
     markup = ''
@@ -64,35 +53,46 @@ def main():
         articles.append(a.text.strip())
         titles.append(a['name'])
 
+    # initialize the search engine (currently the web ui only uses tfidf
+
+    #foo = searchEngineTFIDF()
+    #foo.index_documents(articles, titles)
+
+    #foo.test_query("in")
     #print(titles)
     #print(text)
 
-    while not done:
+@app.route('/search')
+def search():
+    
+    path = r"write path here"
+    #path = r"./input-texts/enwiki-20181001-corpus.100-articles.txt"
 
-        user_input = input("Select action:\n1. Set Boolean search\n2. Set tf-idf search\n3. Enter query prompt\nEnter choice or type 'quit' to exit: ")
-        if user_input == "1":
-            foo = searchEngineBoolean()
-            foo.index_documents(articles, titles)
-        elif user_input == "2":
-            foo = searchEngineTFIDF()
-            foo.index_documents(articles, titles)
-        elif user_input == "3":
-            queryPrompt(foo)
-        elif user_input.lower() == 'quit':
-            done = True
+    markup = ''
+    with open(path, encoding="utf8") as f:
+        markup = f.read()
 
+    # add a fake top-level tag to markup to ensure that parse tree has a root
+    markup = "<top>\n" + markup + "\n</top>\n"
+    # parse XML to find paragraph tags
+    soup = BeautifulSoup(markup, 'xml')
+    articleTags = soup.find_all('article')
 
-# -   -   -   run this thing   -   -   - #
-main()
+    # accumulate body texts and titles
+    articles = list()
+    titles = list()
+    for a in articleTags:
+        articles.append(a.text.strip())
+        titles.append(a['name'])
 
+    # initialize the search engine (currently the web ui only uses tfidf
 
-"""
+    foo = searchEngineTFIDF()
+    foo.index_documents(articles, titles)
+    query = request.args.get('query')
+    matches = []
+    if query:
+        matches = foo.test_query(query)
+    return render_template('searchpage.html', matches=matches)
 
-foo.test_query("example AND NOT nothing")
-foo.test_query("NOT example OR great")
-foo.test_query("( NOT example OR great ) AND nothing") # AND, OR, NOT can be written either in ALLCAPS
-foo.test_query("( not example or great ) and nothing") # ... or all small letters
-foo.test_query("not example and not nothing")
-
-"""
 

@@ -1,0 +1,29 @@
+<html>
+	<head>
+	<meta charset="utf-8">
+	<title>Best Search Engine!</title>
+	
+	</head>
+
+	<body style="background-color:pink;">
+	<h3><p style="font-family:Comic Sans MS, Comic Sans, cursive">Enter a search term!
+	<form>
+		<input type="text" name="query" autofocus>
+		<input type="submit" value="Search">
+	
+	
+	</p></h3>
+	<table>
+	{%for item in matches%}
+	<tr>
+	<td>{{item[0]}}<td>
+	<td>{{item[1]}}<td>
+	<td>{{item[2]}}<td>
+
+	</tr>
+	
+	{%endfor%}
+	</table>
+	</body>
+
+</html>
