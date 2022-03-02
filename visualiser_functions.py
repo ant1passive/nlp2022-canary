@@ -14,7 +14,7 @@ def cat_plot(categories, values):                   #takes two lists as argument
             cats.append("unknown category")
     bars = plt.bar(cats, vals)                             #create a bar graph and save it as an image
     bars[0].set_color('r')
-    plt.savefig("graphimage.png")
+    plt.savefig("plots\graphimage.png")
 
 
 def cat_plot_tuple(tuples):                         #takes two lists as arguments
@@ -34,7 +34,7 @@ def cat_plot_tuple(tuples):                         #takes two lists as argument
     plt.figure()                                    #initialize the figure thingamajig
     bars = plt.bar(cats, vals)                             #create a bar graph and save it as an image
     bars[0].set_color('r')
-    plt.savefig("graphimage.png")
+    plt.savefig("plots\graphimage.png")
 
 
 
