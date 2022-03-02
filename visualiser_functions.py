@@ -17,13 +17,13 @@ def cat_plot(categories, values):                   #takes two lists as argument
     plt.savefig("plots\graphimage.png")
 
 
-def cat_plot_tuple(tuples):                         #takes two lists as arguments
+def cat_plot_tuple(tuples):                         #takes a tuple
     cats = []
     vals = []
 
     for tuple in tuples:
         try:
-            cats.append(str(tuple[0]))
+            cats.append(str(tuple[0]))              #some error handling
         except:
             cats.append("unknown category")
         try:    
