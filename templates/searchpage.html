@@ -6,7 +6,7 @@
 	</head>
 
 	<body style="background-color:pink;">
-	<h3><p style="font-family:Comic Sans MS, Comic Sans, cursive">Enter a wikipedia url!
+	<h3><p style="font-family:Comic Sans MS, Comic Sans, cursive">Enter URL of a Wikipedia article!
 	<form>
 		<input type="text" name="query" autofocus>
 		<input type="submit" value="Search">
@@ -30,6 +30,8 @@
 	
 	{%endfor%}
 	</table>
+    <p> <img src="{{url_for('static', filename='graphimage.png')}}"></p>
+    <!img src="./plots/graphimage.png" style="width: 400px; height 100%">
 	</body>
 
 </html>

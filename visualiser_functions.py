@@ -34,7 +34,7 @@ def cat_plot_tuple(tuples):                         #takes a tuple
     plt.figure()                                    #initialize the figure thingamajig
     bars = plt.bar(cats, vals)                             #create a bar graph and save it as an image
     bars[0].set_color('r')
-    plt.savefig("plots\graphimage.png")
+    plt.savefig("static/graphimage.png")
 
 
 
