@@ -1,6 +1,3 @@
-
-from se_boolean import searchEngineBoolean
-from se_tfidf import searchEngineTFIDF
 from visualiser_functions import cat_plot_tuple
 from bs4 import BeautifulSoup
 from flask import Flask, render_template, request
@@ -15,7 +12,6 @@ app = Flask(__name__)
 def search():
 
     # create an initial article object
-    print("MOI!")
     print(request.args.get('query'))
     url = request.args.get('query')
     if not url:
