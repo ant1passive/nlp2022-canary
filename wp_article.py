@@ -5,6 +5,35 @@ from urllib import request
 from bs4 import BeautifulSoup
 from iso639 import languages
 
+# Wikipedia.org uses some non-standard language codes in its subdomain URLs
+# Source: https://en.wikipedia.org/wiki/List_of_Wikipedias
+# The following dictionary maps these quirks to language names.
+# Some of these originate from ISO 639 but are deprecated (eg. 'sh')
+wikipedia_quirks = {
+    'sq' : 'Albanian',
+    'als' : 'Alemannic',
+    'roa-rup' : 'Aromanian',
+    'map-bms' : 'Banyumasan',
+    'nds-nl' : 'Dutch Low Saxon',
+    'bh' : 'Bihari',
+    'zh-yue' : 'Cantonese',
+    'zh-classical' : 'Classical Chinese',
+    'ms' : 'Malay',
+    'zh-min-nan' : 'Southern Min / Min Nan',
+    'no' : 'Norwegian (Bokmål)',
+    'ksh' : 'Ripuarian',
+    'bat-smg' : 'Samogitian',
+    'simple' : 'Simple English',
+    'roa-tara' : 'Tarantino',
+    'fiu-vro' : 'Võro',
+    'cbk-zam' : 'Zamboanga Chavacano',
+    'arz' : 'Arabic (Egyptian)',
+    'mrj' : 'Western Mari',
+    'sh' : 'Serbo-Croatian',
+    'nah' : 'Nāhuatl',
+    'be-tarask' : 'Belarusian (Taraškievica)'
+    }
+
 
 class wp_article:
 
@@ -23,19 +52,21 @@ class wp_article:
         self.wp_prefix = wp_url_pieces[1]
         # pieces[2] is the language code, eg. 'en', 'sv'
         # Unfortunately, Wikipedia uses several nonstandard language codes.
-        # TODO: handle nonstandard Wikipedia language codes
+        # TODO: Is it OK to assume that at most one of the following
+        # try statements finds a match?
         wp_language_code = wp_url_pieces[2]
+        try:
+            self.lang_name_en = wikipedia_quirks[wp_language_code]
+        except KeyError:
+            pass
         try:
             self.lang_name_en = languages.get(part1 = wp_language_code).name
         except KeyError:
             pass
         try:
-            self.lang_name_en = languages.get(part2t = wp_language_code).name
+            self.lang_name_en = languages.get(part3 = wp_language_code).name
         except KeyError:
             pass
-        if wp_language_code == 'simple':
-            # A nonstandard language code for 'Simple English'
-            self.lang_name_en = 'Simple English'
         if not self.lang_name_en:
             print('Warning: could not resolve English name for language code \'' + wp_language_code + '\'')
         # pieces[3] is the name of the article (percentage encoded)
@@ -78,8 +109,8 @@ class wp_article:
 def main():
 
     # create an initial article object
-    url = "https://en.wikipedia.org/wiki/Tornio"
-    #url = "https://simple.wikipedia.org/wiki/Alabama"
+    #url = "https://en.wikipedia.org/wiki/Tornio"
+    url = "https://simple.wikipedia.org/wiki/Alabama"
     my_article = wp_article(url)
 
     # create an empty list to hold Wikipedia article objects
