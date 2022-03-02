@@ -3,6 +3,8 @@ from se_boolean import searchEngineBoolean
 from se_tfidf import searchEngineTFIDF
 from bs4 import BeautifulSoup
 from flask import Flask, render_template, request
+from wp_article import wp_article
+from operator import itemgetter
 import numpy
 
 numpy.set_printoptions(threshold = numpy.inf) #For testing purposes, allows long matrices to be printed in full.
@@ -32,26 +34,27 @@ def main():
     # there is sample data hard-coded in the class definition.
     # foo = searchEngineBoolean()
 
-    # 5. opens text file and splits text to articles
-    path = r"write path here"
-    #path = r"./input-texts/enwiki-20181001-corpus.100-articles.txt"
+    # create an initial article object
+    url = "https://en.wikipedia.org/wiki/Tornio"
+    my_article = wp_article(url)
 
-    markup = ''
-    with open(path, encoding="utf8") as f:
-        markup = f.read()
+    # create an empty list to hold Wikipedia article objects
+    my_article_list = list()
 
-    # add a fake top-level tag to markup to ensure that parse tree has a root
-    markup = "<top>\n" + markup + "\n</top>\n"
-    # parse XML to find paragraph tags
-    soup = BeautifulSoup(markup, 'xml')
-    articleTags = soup.find_all('article')
+    # append our initial article object to the empty list
+    my_article_list.append(my_article)
 
-    # accumulate body texts and titles
-    articles = list()
+    # create an additional article object for every other language that
+    # the initial article is available in; append also these to list
+    my_article_list += my_article.resolve_interlang_links()
+
+    # go through all article objects and query the length of each
+    # corresponding article from Wikipedia
+    length = list()
     titles = list()
-    for a in articleTags:
-        articles.append(a.text.strip())
-        titles.append(a['name'])
+    for a in my_article_list:
+        titles.append(a.title)
+        lenght.append(a.resolve_length())
 
     # initialize the search engine (currently the web ui only uses tfidf
 
@@ -64,35 +67,33 @@ def main():
 
 @app.route('/search')
 def search():
-    
-    path = r"write path here"
-    #path = r"./input-texts/enwiki-20181001-corpus.100-articles.txt"
 
-    markup = ''
-    with open(path, encoding="utf8") as f:
-        markup = f.read()
+    # create an initial article object
+    url = "https://en.wikipedia.org/wiki/Tornio"
+    my_article = wp_article(url)
 
-    # add a fake top-level tag to markup to ensure that parse tree has a root
-    markup = "<top>\n" + markup + "\n</top>\n"
-    # parse XML to find paragraph tags
-    soup = BeautifulSoup(markup, 'xml')
-    articleTags = soup.find_all('article')
+    # create an empty list to hold Wikipedia article objects
+    my_article_list = list()
 
-    # accumulate body texts and titles
-    articles = list()
-    titles = list()
-    for a in articleTags:
-        articles.append(a.text.strip())
-        titles.append(a['name'])
+    # append our initial article object to the empty list
+    my_article_list.append(my_article)
 
-    # initialize the search engine (currently the web ui only uses tfidf
+    # create an additional article object for every other language that
+    # the initial article is available in; append also these to list
+    my_article_list += my_article.resolve_interlang_links()
 
-    foo = searchEngineTFIDF()
-    foo.index_documents(articles, titles)
+    # Get query from URL variable
     query = request.args.get('query')
+
     matches = []
+
     if query:
-        matches = foo.test_query(query)
+        # go through all article objects and query the length of each
+        # corresponding article from Wikipedia
+        for a in my_article_list:
+            matches.append([a.lang_name_en, a.title, a.resolve_length()])
+        matches = sorted(matches, key=itemgetter(2), reverse=True)
+
     return render_template('searchpage.html', matches=matches)
 
 
