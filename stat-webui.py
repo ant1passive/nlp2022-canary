@@ -19,7 +19,14 @@ def search():
     url = request.args.get('query')
     if not url:
         return render_template('searchpage.html', matches = [])
+
+    #user_input = request.args.get('query')
+    #if not user_input:
+    #    return render_template('searchpage.html', matches = [])
+
     else:
+        #url = "https://en.wikipedia.org/wiki/" + user_input
+
         my_article = wp_article(url)
 
         # create an empty list to hold Wikipedia article objects
