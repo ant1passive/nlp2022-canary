@@ -23,21 +23,21 @@ class wp_article:
         self.wp_prefix = wp_url_pieces[1]
         # pieces[2] is the language code, eg. 'en', 'sv'
         # Unfortunately, Wikipedia uses several nonstandard language codes.
-        # TODO: handle nonstandard language codes
-        iso639_code = wp_url_pieces[2]
-        if iso639_code == 'simple':
+        # TODO: handle nonstandard Wikipedia language codes
+        wp_language_code = wp_url_pieces[2]
+        try:
+            self.lang_name_en = languages.get(part1 = wp_language_code).name
+        except KeyError:
+            pass
+        try:
+            self.lang_name_en = languages.get(part2t = wp_language_code).name
+        except KeyError:
+            pass
+        if wp_language_code == 'simple':
             # A nonstandard language code for 'Simple English'
-            iso639_code = 'en'
-        try:
-            self.lang_name_en = languages.get(part1 = iso639_code).name
-        except KeyError:
-            pass
-        try:
-            self.lang_name_en = languages.get(part2t = iso639_code).name
-        except KeyError:
-            pass
+            self.lang_name_en = 'Simple English'
         if not self.lang_name_en:
-            print('Warning: could not resolve English name for language code \'' + iso639_code + '\'')
+            print('Warning: could not resolve English name for language code \'' + wp_language_code + '\'')
         # pieces[3] is the name of the article (percentage encoded)
         self.title = urllib.parse.unquote(wp_url_pieces[3])   #.decode('utf8')        
         self.info_url = self.wp_prefix + '/w/index.php?title=' + urllib.parse.quote(self.title) + '&action=info'
@@ -79,6 +79,7 @@ def main():
 
     # create an initial article object
     url = "https://en.wikipedia.org/wiki/Tornio"
+    #url = "https://simple.wikipedia.org/wiki/Alabama"
     my_article = wp_article(url)
 
     # create an empty list to hold Wikipedia article objects
