@@ -55,6 +55,7 @@ class wp_article:
         return self.title + "\t\n"
 
 
+# an example use case
 def main():
 
     # create an initial article object
@@ -77,6 +78,8 @@ def main():
         print('Article ' + a.title + ' has length ' + str(a.resolve_length()))
 
 
-main()
+# execute main() only if this is being run as a script
+if __name__ == "__main__":
+    main()
 
 
