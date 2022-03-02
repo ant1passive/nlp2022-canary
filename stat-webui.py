@@ -1,6 +1,7 @@
 
 from se_boolean import searchEngineBoolean
 from se_tfidf import searchEngineTFIDF
+from visualiser_functions import cat_plot_tuple
 from bs4 import BeautifulSoup
 from flask import Flask, render_template, request
 from wp_article import wp_article
@@ -43,12 +44,15 @@ def search():
         query = True
 
         matches = []
+        to_plot = []        
 
         # go through all article objects and query the length of each
         # corresponding article from Wikipedia
         for a in my_article_list:
             matches.append([a.lang_name_en, a.title, a.resolve_length()])
+            to_plot.append((a.lang_name_en, a.resolved_length))
         matches = sorted(matches, key=itemgetter(2), reverse=True)
+        cat_plot_tuple(to_plot)
 
         return render_template('searchpage.html', matches=matches)
 
