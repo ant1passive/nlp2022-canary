@@ -65,8 +65,8 @@ def main():
 @app.route('/search')
 def search():
     
-    path = r"write path here"
-    #path = r"./input-texts/enwiki-20181001-corpus.100-articles.txt"
+    #path = r"write path here"
+    path = r"./input-texts/enwiki-20181001-corpus.100-articles.txt"
 
     markup = ''
     with open(path, encoding="utf8") as f:
