@@ -12,7 +12,7 @@ def cat_plot(categories, values):                   #takes two lists as argument
     if len(cats) < len(vals):
         for i in range(len(vals) - len(cats)):      
             cats.append("unknown category")
-    bars = plt.bar(cats, vals)                             #create a bar graph and save it as an image
+    bars = plt.barh(cats, vals)                             #create a bar graph and save it as an image
     bars[0].set_color('r')
     plt.savefig("plots\graphimage.png")
 
@@ -32,7 +32,7 @@ def cat_plot_tuple(tuples):                         #takes a tuple
             vals.append(0)
     
     plt.figure()                                    #initialize the figure thingamajig
-    bars = plt.bar(cats, vals)                             #create a bar graph and save it as an image
+    bars = plt.barh(cats, vals)                             #create a bar graph and save it as an image
     bars[0].set_color('r')
     plt.savefig("static/graphimage.png")
 
