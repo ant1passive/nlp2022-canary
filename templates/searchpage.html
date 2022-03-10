@@ -24,21 +24,40 @@
 	</head>
 
 	<body style="background-color:pink;">
-	<h2><p style="font-family:Comic Sans MS, Comic Sans, cursive">Enter URL of a Wikipedia article!
+	<h2><p style="font-family:Comic Sans MS, Comic Sans, cursive">Enter search term!
 	<form>
 		<input type="text" name="query" autofocus>
 		<input type="submit" value="Search">
 	</p></h2>
 
-	<h3>Results:</h3>
+	<h3>Results of Boolean search:</h3>
 	<table>
 	<tr>
-	<td>Language:<td>
 	<td>Name:<td>
-	<td>Length:<td>
+	<td>Sample:<td>
+	<td>Relevance:<td>
 
 	</tr>
-	{%for item in matches%}
+	{%for item in bool_matches%}
+	<tr>
+	<td>{{item[0]}}<td>
+	<td>{{item[1]}}<td>
+	<td>{{item[2]}}<td>
+
+	</tr>
+	
+	{%endfor%}
+	</table>
+
+	<h3>Results of TF-IDF search:</h3>
+	<table>
+	<tr>
+	<td>Name:<td>
+	<td>Sample:<td>
+	<td>Relevance:<td>
+
+	</tr>
+	{%for item in tfidf_matches%}
 	<tr>
 	<td>{{item[0]}}<td>
 	<td>{{item[1]}}<td>

@@ -66,7 +66,7 @@ class searchEngineBoolean:
                 if total_matches <= self.max_shown_documents:
                     title = self.titles[i]
                     contents = str(self.documents[i][:self.max_shown_characters])
-                    similarity = 1
+                    similarity = 1.0
                     self.final_list.append((title, contents, similarity))
 
         return self.final_list

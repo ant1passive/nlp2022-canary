@@ -85,14 +85,20 @@ def search():
         articles.append(a.text.strip())
         titles.append(a['name'])
 
-    # initialize the search engine (currently the web ui only uses tfidf
+    # initialize the search engines
 
-    foo = searchEngineTFIDF()
-    foo.index_documents(articles, titles)
+    se_bool = searchEngineBoolean()
+    se_bool.index_documents(articles, titles)
+
+    se_tfidf = searchEngineTFIDF()
+    se_tfidf.index_documents(articles, titles)
+
     query = request.args.get('query')
-    matches = []
+    bool_matches = []
+    tfidf_matches = []
     if query:
-        matches = foo.test_query(query)
-    return render_template('searchpage.html', matches=matches)
+        tfidf_matches = se_tfidf.test_query(query)
+        bool_matches = se_bool.test_query(query)
+    return render_template('searchpage.html', bool_matches = bool_matches, tfidf_matches=tfidf_matches)
 
 
