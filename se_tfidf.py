@@ -51,6 +51,8 @@ class searchEngineTFIDF:
         # works if in the beginning or end of query
         queries_to_make = []
 
+        query = query.lower()
+
         if query[0] == '*':
             for word in self.all_words:
                 if query[1:].lower() in word[-len(query[1:]):]:
