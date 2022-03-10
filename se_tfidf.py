@@ -61,11 +61,27 @@ class searchEngineTFIDF:
             for word in self.all_words:
                 if query[:-1].lower() in word[:(len(query)-1)]:
                     if len(queries_to_make) < self.wildcard_max_queries:
-                        queries_to_make.append(word)   
+                        queries_to_make.append(word)
+
+        elif '*' in query:
+            asterisk_index = query.index('*')
+            word_left = query[:asterisk_index]
+            word_right = query[asterisk_index + 1:]
+            for word in self.all_words:
+                if len(word) > asterisk_index:
+                    if word_left == word[:asterisk_index]:
+                        if word_right == word[-len(word_right):]:
+                            print(word)
+                            print(word_right, word[-len(word_right):])
+                            queries_to_make.append(word)
+
 
         else:   # There was no '*' in query, use the query as-is
             queries_to_make.append(query)
         #print("Queries made:", queries_to_make)
+#lol
+        #print(queries_to_make)
+
 
         for word in queries_to_make:
             query_vector = self.tf.transform([word]).todense() #Calculate a vector for the query
