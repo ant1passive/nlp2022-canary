@@ -1,12 +1,16 @@
 # nlp2022-canary
 
-This repository contains two demo programs involving web scraping and natural language processing:
-  1. A search engine that retrieves text from an excerpt of 100 Wikipedia articles using both Boolean and TF-IDF search.
-  2. A web crawler that, given a URL to a Wikipedia article, looks at interlanguage links on that page and retrieves the article length for each language.
+This repository contains a demo program involving web scraping and natural language processing. The program has the following functions:
+  1. A search engine that retrieves text from a local excerpt of 100 Wikipedia articles using both Boolean and TF-IDF search.
+  2. A web crawler that looks at interlanguage links of a Wikipedia article and and retrieves the article length for each language.
 
-Both programs are used via web browser at `localhost:8000/search`. The programs employ Flask to serve a page to the browser.
+When user makes a search using function (1), search results (if any) will appear tabulated. One of these results can be chosen for further analysis via a radio button in the rightmost column of the table. Clicking on "Analyse" will then run the web crawler.
 
-### How to try out the demos
+Even though the one-hundred-article Wikipedia excerpt for searches is a local file, the crawler accesses actual Wikipedia pages. It just takes the title of a search result as input and starts from the corresponding Wikipedia article on the internet.
+
+The program is used via web browser at `localhost:8000/search`. The programs employ Flask to serve a page to the browser.
+
+### Trying out the program
 
 Clone the git repository and change to `nlp2022-canary` directory:
 
@@ -29,16 +33,13 @@ py -3 -m venv demoenv
 demoenv/Scripts/activate
 ```
 
-Install packages required by the demos:
+Install Python packages required by the program:
 
 ```
 pip install Flask scikit-learn beautifulsoup4 iso-639 lxml matplotlib
-
 ```
 
-### Search engine demo
-
-Run an initialization script to set environment variables for Flask:
+While `demoenv` is active, run an initialization script to set environment variables for Flask:
 
 ```
 . init-search.sh
@@ -57,8 +58,4 @@ flask run
 ```
 
 Go to `localhost:8000/search` in your browser to see the user interface.
-
-### Wikipedia article analyzer demo
-
-Run the initialization script named `init-wpa` instead of `init-search`, then give the command `flask run`. Note that the demos won't run at the same time, because both use port 8000 for communication.
 
