@@ -32,8 +32,9 @@ def cat_plot_tuple(tuples):                         #takes a tuple
         except:
             vals.append(0)
     
-    plt.figure()                                            #initialize the figure thingamajig
-    bars = plt.barh(cats, vals)                             #create a bar graph and save it as an image
+    fig_height = max(6, 0.13*len(tuples))               #autoscale figure according to amount of data
+    plt.figure(figsize=(8, fig_height))                 #initialize the figure thingamajig
+    bars = plt.barh(cats, vals)                         #create a bar graph and save it as an image
     bars[0].set_color('r')
 
     # Create the directory 'static' if it isn't there yet.
