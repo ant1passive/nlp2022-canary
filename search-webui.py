@@ -1,8 +1,10 @@
-
+from visualiser_functions import cat_plot_tuple
 from se_boolean import searchEngineBoolean
 from se_tfidf import searchEngineTFIDF
 from bs4 import BeautifulSoup
 from flask import Flask, render_template, request
+from wp_article import wp_article
+from operator import itemgetter
 import numpy
 
 numpy.set_printoptions(threshold = numpy.inf) #For testing purposes, allows long matrices to be printed in full.
@@ -96,9 +98,52 @@ def search():
     query = request.args.get('query')
     bool_matches = []
     tfidf_matches = []
-    if query:
+
+    radio = request.args.get('analyse')
+    if radio:
+        if ' ' in radio:
+            radio = radio.replace(' ', '_')
+            
+        url = "https://en.wikipedia.org/wiki/" + radio
+
+        
+        #url = "https://en.wikipedia.org/wiki/" + user_input
+
+        my_article = wp_article(url)
+
+        # create an empty list to hold Wikipedia article objects
+        my_article_list = list()
+
+        # append our initial article object to the empty list
+        my_article_list.append(my_article)
+
+        # create an additional article object for every other language that
+        # the initial article is available in; append also these to list
+        my_article_list += my_article.resolve_interlang_links()
+
+        # Get query from URL variable
+        query = True
+
+        matches = []
+        to_plot = []        
+
+        # go through all article objects and query the length of each
+        # corresponding article from Wikipedia
+        for a in my_article_list:
+            matches.append([a.lang_name_en, a.title, a.resolve_length()])
+            to_plot.append((a.lang_name_en, a.resolved_length))
+        matches = sorted(matches, key=itemgetter(2), reverse=True)
+        cat_plot_tuple(to_plot)
+
+    
+    elif query:
         tfidf_matches = se_tfidf.test_query(query)
         bool_matches = se_bool.test_query(query)
+<<<<<<< Updated upstream
     return render_template('search-results.html', bool_matches = bool_matches, tfidf_matches=tfidf_matches)
+=======
+        
+    return render_template('searchpage.html', bool_matches = bool_matches, tfidf_matches=tfidf_matches)
+>>>>>>> Stashed changes
 
 
