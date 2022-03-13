@@ -139,11 +139,7 @@ def search():
     elif query:
         tfidf_matches = se_tfidf.test_query(query)
         bool_matches = se_bool.test_query(query)
-<<<<<<< Updated upstream
+
     return render_template('search-results.html', bool_matches = bool_matches, tfidf_matches=tfidf_matches)
-=======
-        
-    return render_template('searchpage.html', bool_matches = bool_matches, tfidf_matches=tfidf_matches)
->>>>>>> Stashed changes
 
 
