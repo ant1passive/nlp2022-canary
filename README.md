@@ -57,5 +57,5 @@ Start the application:
 flask run
 ```
 
-Go to `localhost:8000/search` in your browser to see the user interface.
+Go to `localhost:8000/search` in your browser to see the user interface. Search function recognizes the asterisk (*) as a wildcard. It may appear at any position in the search term.
 
