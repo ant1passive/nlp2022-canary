@@ -15,7 +15,7 @@ def search():
     print(request.args.get('query'))
     url = request.args.get('query')
     if not url:
-        return render_template('searchpage.html', matches = [])
+        return render_template('wp-analysis-results.html', matches = [])
 
     #user_input = request.args.get('query')
     #if not user_input:
@@ -50,6 +50,6 @@ def search():
         matches = sorted(matches, key=itemgetter(2), reverse=True)
         cat_plot_tuple(to_plot)
 
-        return render_template('searchpage.html', matches=matches)
+        return render_template('wp-analysis-results.html', matches=matches)
 
 
