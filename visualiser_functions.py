@@ -1,3 +1,4 @@
+from pathlib import Path
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -31,9 +32,13 @@ def cat_plot_tuple(tuples):                         #takes a tuple
         except:
             vals.append(0)
     
-    plt.figure()                                    #initialize the figure thingamajig
+    plt.figure()                                            #initialize the figure thingamajig
     bars = plt.barh(cats, vals)                             #create a bar graph and save it as an image
     bars[0].set_color('r')
+
+    # Create the directory 'static' if it isn't there yet.
+    # It is ignored by version control, and doesn't exist after cloning.
+    Path("./static").mkdir(parents=True, exist_ok=True)
     plt.savefig("static/graphimage.png")
 
 
